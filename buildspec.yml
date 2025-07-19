@@ -19,9 +19,17 @@ phases:
       - docker build -t sample-backend:1.0.0 .
 
       - echo Tagging Docker image...
-      - docker tag sample-backend:1.0.0 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1
+      - docker tag sample-backend:1.0.0 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest2
 
   post_build:
     commands:
       - echo Pushing Docker image to ECR...
-      - docker push 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1
+      - docker push 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest2
+
+      - echo "Writing imagedefinitions.json for ECS..."
+      - printf '[{"name":"testJavaContainer","imageUri":"124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest2"}]' > imagedefinitions.json
+      - echo "Build and push complete."
+
+artifacts:
+  files:
+    - imagedefinitions.json
