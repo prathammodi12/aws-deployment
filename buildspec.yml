@@ -25,11 +25,3 @@ phases:
     commands:
       - echo Pushing Docker image to ECR...
       - docker push 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1
-
-      - echo "Writing imagedefinitions.json for ECS..."
-      - printf '[{"name":"java-app","imageUri":"124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1"}]' > imagedefinitions.json
-      - echo "Build and push complete."
-
-artifacts:
-  files:
-    - imagedefinitions.json
