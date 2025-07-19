@@ -1,0 +1,35 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 124713843385.dkr.ecr.ap-south-1.amazonaws.com
+
+      - echo Building JAR file...
+      - mvn clean package -DskipTests
+
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t sample-backend:1.0.0 .
+
+      - echo Tagging Docker image...
+      - docker tag sample-backend:1.0.0 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1
+
+  post_build:
+    commands:
+      - echo Pushing Docker image to ECR...
+      - docker push 124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1
+
+      - echo "Writing imagedefinitions.json for ECS..."
+      - printf '[{"name":"java-app","imageUri":"124713843385.dkr.ecr.ap-south-1.amazonaws.com/backend-app:latest1"}]' > imagedefinitions.json
+      - echo "Build and push complete."
+
+artifacts:
+  files:
+    - imagedefinitions.json
