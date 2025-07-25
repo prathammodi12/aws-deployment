@@ -27,7 +27,7 @@ public class UserController {
     @GetMapping
     public Map<String,String> hello() {
         Map<String, String> map = new HashMap<>();
-        map.put("message", "Hello Java Users welcome to the our 7Span Clubss");
+        map.put("message", "Hello Java Users welcome to the our 7Span Clubss 1");
         return map;
     }
 
